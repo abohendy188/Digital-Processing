@@ -1,0 +1,424 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{blindtext}
+\usepackage{background}
+\usetikzlibrary{calc}
+\backgroundsetup{angle = 0, scale = 1, vshift = -2ex,
+  contents = {\tikz[overlay, remember picture]
+    \draw [rounded corners = 20pt, line width = 1pt,
+           color = udc, fill = yellow!20, double = blue!10]
+           ($(current page.north west)+(1cm,-1cm)$)
+           rectangle ($(current page.south east)+(-1,1)$);}}
+\input{Formato_2021}
+%--------------------------------------------------------------------------------------------------
+
+\pagestyle{fancy}
+\fancyhead{}
+\setlength{\headheight}{14pt}
+\fancyhead{\myframe}
+\fancyfoot{}
+\fancyfoot[c]{\vspace{6pt}\thepage\ 
+}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[R]{
+	\vspace{0.1pt}
+	  \includegraphics*[scale=0.2]{images/team_icon.png}
+}
+\setlength{\footskip}{40pt}
+\fancyfoot[L]{
+	\vspace{6pt}
+	\textcolor{gray}{\textit{ ELC2030: Signals_Project}
+}}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+	%language = matlab,
+	backgroundcolor=\color{white},   % choose the background color
+  	    basicstyle=\footnotesize\ttfamily,      % size of fonts used for the code
+	%mathescape,
+	numbers = left,
+	numberstyle = \small,
+	numbersep = 5pt,
+  breaklines=true,                 % automatic line breaking only at whitespace
+  %captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{green},    % comment style
+ % escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve},     % string literal style
+  showstringspaces=false,
+}
+
+
+%-------------------------------------------------------------------------
+\numberwithin{equation}{section}
+
+
+
+
+\begin{document}
+
+\pagestyle{empty}
+\vspace{1.5cm}
+\begin{center}
+\includegraphics[width=0.2\linewidth]{FACULTY_LOGO.png}
+\end{center}
+\vspace{0.8cm}
+\begin{center}
+\includegraphics[width=0.2\linewidth]{Images/CU-Logo.jpg}
+% COMENTAR LINEA ANTERIOR Y DESCOMENTAR SIGUIENTE SI SE QUIERE LOGO DE LA UDC A COLOR
+%\includegraphics[width=0.7\linewidth]{Imagenes/logo_UDC.png}
+\end{center}
+
+\large
+
+\vspace{2cm}
+
+\begin{center}
+{\setlength\arrayrulewidth{2pt}
+\begin{tabular}{r|p{9.8cm}}
+\arrayrulecolor{udc}
+\colorbox{udc}{\textcolor{white}{\bf TITLE OF PROJECT}}      
+&	IMAGE \& AUDIO DIGITAL PROCESSING         \\[2cm]
+%\colorbox{udc}{\textcolor{white}{\bf GRADO}}       & Dual en Ingeniería Eléctrica    \\[1cm]
+\colorbox{udc}{\textcolor{white}{\bf COURSE}}       & SIGNALS \& SYSTEMS (ELC 2030)   \\[1cm]
+\colorbox{udc}{\textcolor{white}{\bf SUPERVISOR}}  &DR. MICHAEL MELEK    \\[1cm]
+\colorbox{udc}{\textcolor{white}{\bf STUDENTs}}  &\begin{enumerate}
+    \item ABDELRAHMAN MOHAMED SALAH
+    \item MOHAMED ESSAM ABDELAZEEM
+\end{enumerate}	 
+\\[2cm]%                                                  &	Apellido1 Apellido 2, Nombre  \\[2cm]
+\colorbox{udc}{\textcolor{white}{IDs}}       	&\begin{enumerate}
+    \item 9220473
+    \item 9220720
+\end{enumerate}	 
+\end{tabular}}
+\end{center}
+\normalsize
+% FIN DE LA PORTADA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -----------------------------------------------------------------------------------------------------------------------------------
+\numberwithin{equation}{section}
+
+\cleardoublepage
+
+
+
+\pagenumbering{roman}
+\include{abstract}
+
+%{\pagestyle{plain}
+%\tableofcontents
+%\listoffigures
+%\listoftables
+%\cleardoublepage
+%}
+
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Image Filtration and restoration}
+\hspace{\parindent}We did this part with the help of the following built-in functions:
+\begin{itemize}
+    \item conv2 \cite{2-D-2024-01-02}
+    \item fft2 
+    \item ifft2
+    \item im2double\cite{Convert-2024-01-02}
+    \item imshow\cite{Display-2024-01-02}
+    \item subplot \cite{Create-2024-01-02}
+    \item zeros
+    \item ones
+    \item rgb2gray
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Getting the three color components of the image}
+\subsubsection{Working idea}
+\hspace{\parindent}From the previously known information every image consists of three images of different colors (Red, Green, and Blue) concatenated at each other, We extracted each component alone and concatenated it with the other two black components to get full three images of different colors forming the original image.\cite{r-2024-01-02}
+\subsubsection{The processed images}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/the three color components.png}
+    \caption{The three components of the color}
+    \label{exposed}
+\end{figure}
+\vspace{0.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\subsection{Edge Detection}
+\hspace{\parindent}In edge detection, we decided to work by convolving the image with the Laplacian kernel, as the Laplacian is a measure of the spacial derivative of an image which can detect the great changes in the pixel value of an image and get the edges.\cite{Spatial-2024-01-02}
+\subsubsection{How to apply the kernel?}
+\hspace{\parindent} We should conserve the realization of some conditions:
+\begin{itemize}
+    \item The kernel is a square Matrix.
+    \item The sum of kernel elements equals zero.
+    \item We can apply the kernel on the gray image or each component of the image and concatenate them.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{The Kernel used}
+\begin{center}
+  $  \begin{pmatrix}
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    -1&-1&-1&-1&16&-1&-1&-1&-1\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0
+\end{pmatrix}$
+\end{center}\vspace{0.5cm}
+\subsubsection{The processed images}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/colored edge detection.png}
+    \caption{Edge Detection for colored images}
+    \label{exposed}
+\end{figure}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.5] {Images/Gray_edge_detection.png}
+    \caption{Edge Detection for gray images}
+    \label{exposed}
+\end{figure}
+\subsection{Sharpening}
+\subsubsection{The working idea }
+\hspace{\parindent}The working idea of the kernel used to perform the sharing is so simple that you add the edges you got from the edge-detected image and add to the original so that you can get the edges sharpened.
+\subsubsection{The Kernel used}
+\begin{center}
+  $  \begin{pmatrix}
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    -1&-1&-1&-1&17&-1&-1&-1&-1\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0\\
+    0&0&0&0&-1&0&0&0&0
+\end{pmatrix}$
+\end{center}\vspace{0.75cm}
+\subsubsection{The processed images}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/sharpened colored.png}
+    \caption{Sharpening colored images}
+    \label{exposed}
+\end{figure}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.5] {Images/sharpened gray.png}
+    \caption{Sharpening gray images}
+    \label{exposed}
+\end{figure}
+\vspace{1 cm}
+\pagebreak
+\subsection{Bluring}
+\subsubsection{The working idea}
+\hspace{\parindent}Bluring basically means averaging, as when you want to blur a photo, you want to make it smoother, less detailed, and not sharpened. So, you just can make every pixel dependent on the value of the pixels around it.\\
+
+\hspace{\parindent}We can make the dependency of the pixel on other pixels dependent also on the distance between the two pixels\cite{Blurring-2024-01-02}, but we will just be satisfied by the simple averaging kernel. The averaging kernel is characterized that we divide the whole kernel by the sum of its elements.
+\subsubsection{The Kernel used}
+\vspace{1 cm}
+
+\begin{center}
+  $$\frac{1}{100}*  \begin{pmatrix}
+    1 &  1 & 1  & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\ 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\ 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 1&1&1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\  1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
+\end{pmatrix}$$
+\end{center}
+\vspace{1cm}
+\subsubsection{The processed images}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.25] {Images/bluring colored.png}
+    \caption{Bluring colored images}
+    \label{exposed}
+\end{figure}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.25] {Images/blured gray.png}
+    \caption{Bluring gray images}
+    \label{exposed}
+\end{figure}
+\pagebreak
+\subsection{Motion Bluring}
+\subsubsection{The working idea}
+\hspace{\parindent}By intuition, we can say that motion blurring has the idea of normal averaging, but we make every pixel depend on the pixels in the same direction of motion instead of all directions. The kernel can only be a vector of all ones divided by their number and directed in the direction we want the motion in.
+\subsubsection{The Kernel used}
+\vspace{1cm}
+\begin{center}
+    $\frac{1}{50} *$ vector of length (50) containing only ones
+
+\end{center}
+
+\vspace{1cm}
+\subsubsection{The processed images}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/motion blured colored.png}
+    \caption{Motion bluring colored images}
+    \label{exposed}
+\end{figure}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/motion blured gray.png}
+    \caption{Motion bluring gray images}
+    \label{exposed}
+\end{figure}
+\pagebreak
+\subsection{Restoring the image from motion blurring}
+\subsubsection{Working idea}
+\hspace{\parindent}The idea of restoring the original image is based on the Fourier Transform concept to reflect the impact of convolution, we can't do this in the time domain easily so, we have to convert to the frequency domain as convolution turns into multiplication in frequency domain, so we can reflect the impact of convolution by using division.
+\subsubsection{the restoring process}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/Reconstruction_colored.png}
+    \caption{Reconstructing colored images}
+    \label{exposed}
+\end{figure}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/Reconstruction.png}
+    \caption{Reconstructing gray images}
+    \label{exposed}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%--------------------------------------------------------------------------------------------------------
+\pagebreak
+\newpage
+
+\section{Communication System Simulation}
+\subsection{Recording the voice}
+\hspace{\parindent}In order for the voice to be of good quality, the sampling rate must be more than double the frequency of the sound that humans can hear (which ranges from 20 Hz to 20 kHz). So, we chose a sampling rate of 44100 Hz, which is a widely used number worldwide.\\
+\vspace{1px}
+\hspace{\parindent} We can use a higher sampling rate to get more quality sound, such as 96 kHz or 192 kHz, which are widely used in higher-quality communication systems.\\
+\vspace{1px}
+\hspace{\parindent}In low-quality voice, 8-bit is widely used but to make the voice of an acceptable quality range, we used 16-bit depth. For higher quality, we use 24-bit or 32-bit depth.\cite{How_to_record_audio}
+\subsection{Filtering the voice}
+\hspace{\parindent}We used the Butterworth filter because it has no ripples\cite{1-D_digital_filter}. At first, we used $F_p_a_s_s = 8000 Hz$ and $F_s_t_o_p = 8500 Hz$, but it interfered with the communication part as MATLAB has a limited range in the carrier, so we dropped the value a little to make sure the whole communication system works well, and also decreasing the frequency doesn't affect the voice so much as the frequency of the human most power exists in the range of 300 to 3400 $Hz$. So, we used $F_p_a_s_s = 6000 Hz$ and $F_s_t_o_p = 6500 Hz$ .\cite{Design_FIR}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.9] {Images/mag vs freq.png}
+    \caption{Magnitude vs Frequency}
+    \label{exposed}
+\end{figure}    
+\pagebreak
+\subsection{Plotting the spectrum of the signals}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.4] {Images/c1.jpeg}
+    \caption{original first signal}
+    \label{exposed}
+\end{figure}  
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.4] {Images/c2.jpeg}
+    \caption{original second signal}
+    \label{exposed}
+\end{figure}  
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.4] {Images/c3.jpeg}
+    \caption{Filtered first signal}
+    \label{exposed}
+\end{figure}  
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.4] {Images/c4.jpeg}
+    \caption{Filtered second signal}
+    \label{exposed}
+\end{figure}  
+\pagebreak
+\subsection{Modulation}
+In carrier, we used the frequency values $ F_c_1=5500 Hz$ and $F_c_2=16000Hz$ to make the two frequencies away from each other to not interfere and could filter them by non-ideal filter easily\cite{Transpose-2024-01-02}. Also, MATLAB can't put the signal on the higher carrier so we don't have a lot of frequency space here\cite{Amplitude_modulation}
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.5] {Images/d.jpeg}
+    \caption{Modulated signals}
+    \label{exposed}
+\end{figure}  
+\pagebreak
+\newpage
+\subsection{Demodulation}
+\hspace{\parindent}In the receiver stage, first we need to separate the two signals 
+by applying a bandpass filter to separate the two signals (demultiplexing).the first bandpass frequencies valuesare $F_s_t_o_p_1=100Hz, F_p_a_s_s_1=1100Hz, F_p_a_s_s_2=10000Hz, F_s_t_o_p_2=15000Hz$
+and the second one values were
+$F_s_t_o_p_1=10200Hz, F_p_a_s_s_1=11400Hz$ ,$ F_p_a_s_s_2=20800Hz,
+F_s_t_o_p_2=22000Hz$\\
+\vspace{1px}
+\hspace{\parindent}second, we multiply the signal with the carrier signal,then apply a low pass filter with 
+gain of 2 to restore original audios(demodulation). 
+the signal operates in different domains:
+\begin{enumerate}
+    \item time domain: 
+    $$r(t) = y(t)* c(t)  $$ 
+Where, r(t): received signal, y(t): the signal came from bandpass filter, c(t): the carrier
+\item Frequency domain:
+$$R(\omega) =\frac{Y(\omega-\omega_o)+Y(\omega+\omega_o)}{2}$$
+\begin{itemize}
+    \item R($\omega$): received signal
+    \item Y($\omega$): the signal came from bandpass filter
+\end{itemize}
+
+
+\end{enumerate}
+
+  \begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/e1.jpeg}
+    \caption{Received first signal in frequency domain}
+    \label{exposed}
+\end{figure}  
+\begin{figure}[ht]
+   \centering
+    \includegraphics[scale =0.3] {Images/e2.jpeg}
+    \caption{Received first signal in time domain}
+    \label{exposed}
+\end{figure}  
+\pagebreak
+\begin{figure}[t]
+   \centering
+    \includegraphics[scale =0.3] {Images/e32.jpeg}
+    \caption{Received second signal in frequency domain}
+    \label{exposed}
+\end{figure}  
+\begin{figure}[t]
+   \centering
+    \includegraphics[scale =0.3] {Images/e4 (2).jpeg}
+    \caption{Received second signal in time domain}
+    \label{exposed}
+\end{figure}  
+
+
+
+\pagebreak
+\newpage
+
+\appendix
+\pagebreak
+\newpage
+
+\vspace{5cm}
+\section{References}
+\bibliographystyle{unsrtnat}
+\bibliography{ref}
+
+\pagebreak
+\section{ Matlab code for image processing}
+\lstinputlisting[language=matlab]{signals_project.m}
+\pagebreak
+\section{ Matlab code for Simulating Communication Systems}
+\lstinputlisting[language=matlab]{Communication_Systems.m}
+
+\pagebreak
+\section{ Names and codes in Arabic}
+
+\begin{center}
+    \begin{tabular}{|c|c|r|}
+			\hline
+			\rowcolor{udc}ID &Section & 	\RL{الأسم} \\\hline
+			9220720 &3 & 	\RL{محمد عصام عبد العظيم ابراهيم} \\\hline
+
+			9220473 &2 & 	\RL{عبدالرحمن محمد صلاح الدين أبوهندي} \\\hline	
+  \end{tabular}
+\end{center}
+
+\end{document}
